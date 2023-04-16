@@ -10,7 +10,9 @@ import tempfile
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
-import config
+import os
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+
 
 app = Flask(__name__)
 CORS(app)
@@ -54,12 +56,11 @@ def summarize_text(text):
     else:
         return f"Error: {response.status_code} {response.text}"
 
-openai.api_key = config.apikey
 
 api_endpoint = 'https://api.openai.com/v1/chat/completions'
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer '+ config.apikey
+    'Authorization': 'Bearer '+ openai.api_key
 }
 
 @app.route('/api/transcribe', methods=['POST'])
